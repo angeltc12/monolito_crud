@@ -258,7 +258,7 @@ El sistema valida:
 * Formato de email
 * Formato de imágenes
 
----
+-----
 
 #  Autor
 
