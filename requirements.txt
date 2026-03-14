@@ -1,0 +1,6 @@
+mysql-connector-python
+pandas
+Pillow
+reportlab
+tkcalendar
+python-dotenv
