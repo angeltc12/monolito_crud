@@ -1,93 +1,107 @@
-#  Sistema Gastronómico PRO (Arquitectura Monolítica)
+# Sistema Gastronómico PRO (Arquitectura Monolítica)
 
-Sistema de gestión gastronómica desarrollado en **Python**, utilizando **Tkinter** para la interfaz gráfica y **MySQL** como base de datos.
+Sistema de gestión gastronómica desarrollado en Python utilizando Tkinter para la interfaz gráfica y MySQL como base de datos.
 
-El sistema sigue una **arquitectura monolítica**, donde toda la lógica de negocio, la interfaz gráfica y el acceso a datos se encuentran integrados en una sola aplicación.
+El sistema sigue una arquitectura monolítica, donde la interfaz gráfica, la lógica del sistema y el acceso a datos se encuentran integrados dentro de una sola aplicación.
 
 ---
 
-#  Requisitos técnicos del proyecto
+# Descripción del proyecto
+
+Este proyecto consiste en el desarrollo de un sistema de gestión para un restaurante o negocio gastronómico.  
+El objetivo principal es centralizar la administración de información relacionada con inventario, menú, empleados y sedes dentro de una sola aplicación de escritorio.
+
+El sistema permite realizar operaciones de registro, consulta, actualización y eliminación de datos (CRUD), además de generar reportes en formato Excel y PDF.
+
+---
+
+# Requisitos académicos del proyecto
 
 Este proyecto cumple con los siguientes requisitos académicos:
 
-* **Estructura modular:** el sistema contiene **4 módulos funcionales principales**.
-* **Base de datos:** utiliza la misma base de datos desarrollada en el módulo **Profundización y Aplicaciones en Bases de Datos**.
-* **Integración completa:** el sistema demuestra la **conexión funcional entre interfaz gráfica, lógica del sistema y base de datos MySQL**.
+- Implementación de una arquitectura monolítica
+- Uso de Python como lenguaje principal
+- Conexión con MySQL como base de datos
+- Integración de interfaz gráfica con Tkinter
+- Uso de procedimientos almacenados (Stored Procedures)
+- Desarrollo de múltiples módulos funcionales
+- Implementación de validaciones de datos
 
 ---
 
-#  Arquitectura del sistema
+# Arquitectura del sistema
 
-El sistema utiliza una **arquitectura monolítica**, lo que significa que:
+El sistema utiliza una arquitectura monolítica. Esto significa que todos los componentes del sistema se encuentran integrados dentro de una sola aplicación.
 
-* La **interfaz gráfica**
-* La **lógica del sistema**
-* El **acceso a la base de datos**
+Componentes principales:
 
-se encuentran dentro de **una misma aplicación y un mismo código fuente**.
+- Interfaz gráfica (Tkinter)
+- Lógica del sistema
+- Acceso a datos (MySQL)
 
 ### Ventajas del enfoque monolítico
 
-* Implementación sencilla
-* Fácil despliegue
-* Ideal para proyectos académicos
-* Menor complejidad de infraestructura
+- Implementación sencilla
+- Despliegue rápido
+- Ideal para proyectos académicos
+- Menor complejidad de infraestructura
 
 ### Desventajas
 
-* Escalabilidad limitada
-* Alto acoplamiento entre componentes
+- Escalabilidad limitada
+- Alto acoplamiento entre componentes
 
 ---
 
-#  Módulos del sistema
+# Módulos del sistema
 
-El sistema está dividido en **4 módulos principales**:
+El sistema está dividido en cuatro módulos principales:
 
-| Módulo     | Función                        |
-| ---------- | ------------------------------ |
+| Módulo | Función |
+|------|------|
 | Inventario | Gestión de productos e insumos |
-| Menú       | Gestión de platos y precios    |
-| Empleados  | Administración del personal    |
-| Sedes      | Gestión de sucursales          |
+| Menú | Administración de platos y precios |
+| Empleados | Registro y gestión del personal |
+| Sedes | Administración de sucursales |
 
-Cada módulo permite realizar operaciones **CRUD (Crear, Leer, Actualizar y Eliminar)**.
+Cada módulo permite realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar).
 
 ---
 
-# ️ Funcionalidades principales
+# Funcionalidades principales
 
 El sistema incluye las siguientes características:
 
-* CRUD completo en todos los módulos
-* Dashboard con estadísticas
-* Búsqueda y filtrado de registros
-* Exportación de datos a **Excel**
-* Exportación de datos a **PDF**
-* Validación de campos numéricos
-* Validación de texto
-* Validación de email
-* Carga de imágenes con **Pillow**
-* Uso de calendario para selección de fechas
-* Confirmación de acciones importantes
-* Uso de **Stored Procedures en MySQL**
+- CRUD completo en todos los módulos
+- Dashboard con estadísticas
+- Búsqueda y filtrado de registros
+- Exportación de datos a Excel
+- Exportación de datos a PDF
+- Validación de campos numéricos
+- Validación de texto
+- Validación de formato de email
+- Carga de imágenes mediante Pillow
+- Selección de fechas mediante calendario
+- Confirmación de acciones importantes
+- Uso de Stored Procedures en MySQL
 
 ---
 
-#  Tecnologías utilizadas
+# Tecnologías utilizadas
 
-* **Python 3**
-* **Tkinter**
-* **MySQL**
-* **mysql-connector-python**
-* **Pandas**
-* **ReportLab**
-* **Pillow**
-* **Tkcalendar**
+- Python 3
+- Tkinter
+- MySQL
+- mysql-connector-python
+- Pandas
+- ReportLab
+- Pillow
+- Tkcalendar
+- python-dotenv
 
 ---
 
-#  Estructura del proyecto
+# Estructura del proyecto
 
 ```
 Sistema-Gastronomico-Monolito/
@@ -107,9 +121,9 @@ Sistema-Gastronomico-Monolito/
 
 ---
 
-# ️ Instalación del proyecto
+# Instalación del proyecto
 
-## 1️ Clonar el repositorio
+## 1. Clonar el repositorio
 
 ```
 git clone https://github.com/angeltc12/monolito_crud.git
@@ -118,7 +132,7 @@ cd monolito_crud
 
 ---
 
-## 2️ Instalar dependencias
+## 2. Instalar dependencias
 
 ```
 pip install -r requirements.txt
@@ -126,9 +140,9 @@ pip install -r requirements.txt
 
 ---
 
-## 3️ Crear base de datos
+## 3. Crear base de datos
 
-El sistema utiliza **MySQL**.
+El sistema utiliza MySQL.
 
 Crear la base de datos ejecutando:
 
@@ -136,22 +150,22 @@ Crear la base de datos ejecutando:
 CREATE DATABASE sistema_gastronomico;
 ```
 
-Luego importar el **script SQL del proyecto** que contiene las tablas:
+Luego importar las tablas necesarias:
 
-* inventario
-* menu
-* empleados
-* sedes
+- inventario
+- menu
+- empleados
+- sedes
+
+También se deben importar los Stored Procedures utilizados por la aplicación.
 
 ---
 
-## 4️ Configurar conexión a la base de datos
+## 4. Configurar conexión a la base de datos
 
-El sistema utiliza **variables de entorno** mediante un archivo `.env`.
+El sistema utiliza variables de entorno mediante un archivo `.env`.
 
-Crear el archivo `.env` en la raíz del proyecto.
-
-Contenido del archivo:
+Crear el archivo `.env` en la raíz del proyecto con el siguiente contenido:
 
 ```
 DB_HOST=localhost
@@ -160,114 +174,68 @@ DB_PASSWORD=
 DB_NAME=sistema_gastronomico
 ```
 
-### Explicación
+### Descripción de variables
 
-| Variable    | Descripción                  |
-| ----------- | ---------------------------- |
-| DB_HOST     | Dirección del servidor MySQL |
-| DB_USER     | Usuario de MySQL             |
-| DB_PASSWORD | Contraseña del usuario       |
-| DB_NAME     | Nombre de la base de datos   |
+| Variable | Descripción |
+|------|------|
+| DB_HOST | Dirección del servidor MySQL |
+| DB_USER | Usuario de la base de datos |
+| DB_PASSWORD | Contraseña del usuario |
+| DB_NAME | Nombre de la base de datos |
 
 ---
 
-# ▶ Ejecutar la aplicación
+# Ejecutar la aplicación
 
-Ejecutar el sistema con:
+Para iniciar el sistema ejecutar:
 
 ```
 python main.py
 ```
 
-Si la configuración es correcta, se abrirá la **interfaz gráfica del Sistema Gastronómico PRO**.
+Si la configuración es correcta, se abrirá la interfaz del Sistema Gastronómico PRO.
 
 ---
 
-#  Funcionalidades del sistema
+# Exportación de datos
 
-## Dashboard
+El sistema permite exportar información en los siguientes formatos:
 
-Muestra estadísticas generales del sistema como:
+- Excel (.xlsx)
+- PDF (.pdf)
 
-* cantidad de productos
-* cantidad de platillos
-* número de empleados
-
----
-
-## Inventario
-
-Permite:
-
-* Registrar productos
-* Controlar stock
-* Gestionar costos
+Los reportes generados respetan el filtro de búsqueda aplicado en la interfaz.
 
 ---
 
-## Menú
-
-Permite:
-
-* Registrar platos
-* Asignar categorías
-* Subir imágenes del plato
-
----
-
-## Empleados
-
-Permite:
-
-* Registrar empleados
-* Guardar teléfono
-* Fecha de contratación
-* Fotografía del empleado
-
----
-
-## Sedes
-
-Permite:
-
-* Registrar sedes
-* Dirección
-* Capacidad
-* Teléfono
-
----
-
-#  Exportación de datos
-
-El sistema permite exportar información a:
-
-* **Excel (.xlsx)**
-* **PDF (.pdf)**
-
-Los reportes respetan el **filtro de búsqueda aplicado en la interfaz**.
-
----
-
-# ️ Validaciones implementadas
+# Validaciones implementadas
 
 El sistema valida:
 
-* Campos obligatorios
-* Campos numéricos
-* Campos de texto
-* Formato de email
-* Formato de imágenes
+- Campos obligatorios
+- Campos numéricos
+- Campos de texto
+- Formato de correo electrónico
+- Formato de imágenes
 
------
-
-#  Autor
-
-**Miguel Torres**
-
-Proyecto desarrollado como parte de un **Sistema Monolítico de Gestión Gastronómica en Python**.
+Estas validaciones ayudan a mantener la integridad de los datos almacenados en la base de datos.
 
 ---
 
-#  Licencia
+# Autor
 
-Proyecto desarrollado con fines **educativos**.
+Miguel Torres
+
+Proyecto desarrollado como parte de la implementación de un sistema monolítico de gestión gastronómica en Python.
+
+---
+
+# Agradecimientos
+
+Agradecimiento especial a ti James por su orientación y apoyo durante el desarrollo del proyecto.
+
+---
+
+# Licencia
+
+Proyecto desarrollado con fines educativos.

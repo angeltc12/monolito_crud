@@ -383,7 +383,7 @@ class MonolitoGastronomicoPro:
             return False
 
     # --------------------------
-    # DASHBOARD 1
+    # DASHBOARD
     # --------------------------
 
     def crear_dashboard(self):
@@ -558,89 +558,85 @@ class MonolitoGastronomicoPro:
             valores = [e.get().strip() for e in entries.values()]
             cols = list(campos.values())
 
-            # guardar foto si es empleados
-            if tabla == "empleados" and self.foto_actual:
-                cols.append("foto")
-                valores.append(self.foto_actual)
-
-            elif tabla == "menu":
-                data = self.query(
-                    f"SELECT id,{','.join(campos.values())},imagen FROM {tabla}",
-                    fetch=True
-                )
-
-            else:
-                data = self.query(
-                    f"SELECT id,{','.join(campos.values())} FROM {tabla}",
-                    fetch=True
-                )
+            # ---------------- INSERTAR ----------------
 
             if varID.get() == "Nuevo":
 
                 if tabla == "empleados":
                     cols.append("foto")
+
                     valores.append(self.foto_actual)
 
                 if tabla == "menu":
                     cols.append("imagen")
+
                     valores.append(self.foto_producto)
 
-                if varID.get() == "Nuevo":
+                if tabla == "inventario":
 
-                    if tabla == "inventario":
-                        q = "CALL sp_insert_inventario(%s,%s,%s)"
+                    q = "CALL sp_insert_inventario(%s,%s,%s)"
 
-                    elif tabla == "menu":
-                        q = "CALL sp_insert_menu(%s,%s,%s,%s)"
 
-                    elif tabla == "empleados":
-                        q = "CALL sp_insert_empleado(%s,%s,%s,%s,%s)"
+                elif tabla == "menu":
 
-                    elif tabla == "sedes":
-                        q = "CALL sp_insert_sede(%s,%s,%s,%s)"
+                    q = "CALL sp_insert_menu(%s,%s,%s,%s)"
 
-                    self.query(q, valores)
 
+                elif tabla == "empleados":
+
+                    q = "CALL sp_insert_empleado(%s,%s,%s,%s,%s)"
+
+
+                elif tabla == "sedes":
+
+                    q = "CALL sp_insert_sede(%s,%s,%s,%s)"
+
+                self.query(q, valores)
+
+
+            # ---------------- ACTUALIZAR ----------------
 
             else:
 
                 if tabla == "empleados":
-                    cols.append("foto")
-
                     valores.append(self.foto_actual)
 
                 if tabla == "menu":
-                    cols.append("imagen")
-
                     valores.append(self.foto_producto)
 
-                else:
+                if tabla == "inventario":
 
-                    if tabla == "inventario":
-                        q = "CALL sp_update_inventario(%s,%s,%s,%s)"
-                        valores = [varID.get()] + valores
+                    q = "CALL sp_update_inventario(%s,%s,%s,%s)"
 
-                    elif tabla == "menu":
-                        q = "CALL sp_update_menu(%s,%s,%s,%s,%s)"
-                        valores = [varID.get()] + valores
-
-                    elif tabla == "empleados":
-                        q = "CALL sp_update_empleado(%s,%s,%s,%s,%s,%s)"
-                        valores = [varID.get()] + valores
-
-                    elif tabla == "sedes":
-                        q = "CALL sp_update_sede(%s,%s,%s,%s,%s)"
-                        valores = [varID.get()] + valores
-
-                    self.query(q, valores)
+                    valores = [varID.get()] + valores
 
 
-                valores.append(varID.get())
+                elif tabla == "menu":
+
+                    q = "CALL sp_update_menu(%s,%s,%s,%s,%s)"
+
+                    valores = [varID.get()] + valores
+
+
+                elif tabla == "empleados":
+
+                    q = "CALL sp_update_empleado(%s,%s,%s,%s,%s,%s)"
+
+                    valores = [varID.get()] + valores
+
+
+                elif tabla == "sedes":
+
+                    q = "CALL sp_update_sede(%s,%s,%s,%s,%s)"
+
+                    valores = [varID.get()] + valores
 
                 self.query(q, valores)
 
             actualizar()
+
             limpiar()
+
             self.crear_dashboard()
 
         def eliminar():
@@ -827,70 +823,107 @@ class MonolitoGastronomicoPro:
 
             df = pd.DataFrame(data, columns=columnas)
 
-            df.to_excel(path, index=False)
+            # CREAR EXCEL CON FORMATO
+            writer = pd.ExcelWriter(path, engine="xlsxwriter")
+            df.to_excel(writer, index=False, sheet_name="Datos")
+
+            worksheet = writer.sheets["Datos"]
+
+            # ajustar ancho de columnas
+            worksheet.set_column("A:A", 8)  # ID
+            worksheet.set_column("B:C", 20)  # nombres y apellidos
+            worksheet.set_column("D:D", 18)  # telefono
+            worksheet.set_column("E:E", 20)  # fecha contratacion
+
+            writer.close()
 
             messagebox.showinfo("Excel", "Archivo Excel exportado correctamente.")
 
         # EXPORT pdf
+        # EXPORT pdf
         def export_pdf():
 
-            path = filedialog.asksaveasfilename(defaultextension=".pdf")
+            path = filedialog.asksaveasfilename(
+                defaultextension=".pdf",
+                filetypes=[("PDF files", "*.pdf")]
+            )
 
             if not path:
+                messagebox.showwarning("PDF", "Exportación cancelada.")
                 return
 
             filtro = filtro_export.get().strip()
-
 
             if filtro:
                 consulta = f"""
                 SELECT * FROM {tabla}
                 WHERE LOWER(CONCAT_WS(' ',{','.join(campos.values())})) LIKE LOWER(%s)
                 """
-
                 data = self.query(consulta, (f"%{filtro}%",), fetch=True)
             else:
                 data = self.query(f"SELECT * FROM {tabla}", fetch=True)
 
+            if not data:
+                messagebox.showinfo("PDF", "No hay datos para exportar.")
+                return
+
             c = canvas.Canvas(path)
+
+            # tamaño de hoja
+            page_width = 595
+            margin = 40
+
+            headers = ["ID"] + list(campos.keys())
+
+            # ancho automático de columna
+            col_width = (page_width - (margin * 2)) / len(headers)
 
             y = 800
 
             # TITULO
             c.setFont("Helvetica-Bold", 16)
-            c.drawString(50, y, f"Reporte de {tabla.upper()}")
+            c.drawCentredString(page_width / 2, y, f"Reporte de {tabla.upper()}")
 
-            y -= 40
+            y -= 50
 
+            # HEADERS
             c.setFont("Helvetica-Bold", 10)
 
-            headers = ["ID"] + list(campos.keys())
-
-            x = 50
+            x = margin
 
             for h in headers:
                 c.drawString(x, y, h)
-                x += 120
+                x += col_width
 
             y -= 20
 
-            c.setFont("Helvetica", 10)
+            c.setFont("Helvetica", 9)
 
             for row in data:
 
-                x = 50
+                x = margin
 
                 for value in row[:len(headers)]:
-                    c.drawString(x, y, str(value))
-                    x += 120
+                    texto = str(value)
+
+                    # cortar texto muy largo
+                    if len(texto) > 15:
+                        texto = texto[:15] + "..."
+
+                    c.drawString(x, y, texto)
+                    x += col_width
 
                 y -= 20
 
+                # nueva pagina
                 if y < 50:
                     c.showPage()
                     y = 800
 
             c.save()
+
+            messagebox.showinfo("PDF", "Archivo PDF exportado correctamente.")
+
 
         botones_frame = tk.Frame(derecha, bg=self.color_bg)
         botones_frame.pack(fill="x", pady=5)
@@ -930,7 +963,10 @@ class MonolitoGastronomicoPro:
             except:
                 ent.set_date(valor)
 
-        # mostrar foto si existe
+        # --------------------------
+        # MOSTRAR FOTO
+        # --------------------------
+
         if len(valores) > len(entry_list) + 1:
 
             ruta = valores[-1]
@@ -963,38 +999,6 @@ class MonolitoGastronomicoPro:
                         self.preview_menu.configure(image=foto)
                         self.preview_menu.image = foto
 
-            # mostrar foto si existe
-            if len(valores) > len(entry_list) + 1:
-
-                ruta = valores[-1]
-
-                if ruta:
-
-                    ruta_emp = os.path.join(self.empleados_img_path, ruta)
-                    ruta_menu = os.path.join(self.menu_img_path, ruta)
-
-                    ruta_real = None
-
-                    if os.path.exists(ruta_emp):
-                        ruta_real = ruta_emp
-
-                    elif os.path.exists(ruta_menu):
-                        ruta_real = ruta_menu
-
-                    if ruta_real:
-
-                        img = Image.open(ruta_real)
-                        img.thumbnail((160, 160))
-
-                        foto = ImageTk.PhotoImage(img)
-
-                        if hasattr(self, "preview_empleado"):
-                            self.preview_empleado.configure(image=foto)
-                            self.preview_empleado.image = foto
-
-                        if hasattr(self, "preview_menu"):
-                            self.preview_menu.configure(image=foto)
-                            self.preview_menu.image = foto
 
     # --------------------------
     # SUBIR FOTO EMPLEADO
